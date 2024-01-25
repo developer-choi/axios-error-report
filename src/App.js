@@ -1,25 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import {useCallback} from 'react';
+import axios from 'axios';
 
 function App() {
+  const onClick = useCallback(() => {
+    axiosInstance.get('/v2/list.json').catch(error => {
+      console.error(error);
+    });
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <button onClick={onClick}>Click ME</button>
   );
 }
+
+const axiosInstance = axios.create({
+  baseURL: 'https://api.apis.guru'
+});
+
+axiosInstance.interceptors.response.use(function (response) {
+  return Promise.reject(response);
+}, function (error) {
+  return error;
+});
 
 export default App;
